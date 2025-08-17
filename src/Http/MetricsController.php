@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class MetricsController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): Response
     {
         $series = DB::table('dhp_results')
             ->selectRaw('rule_code, COUNT(*) as cnt')

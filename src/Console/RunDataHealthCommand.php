@@ -12,7 +12,7 @@ class RunDataHealthCommand extends Command
     protected $signature = 'data-health-poc:run {--rule=}';
     protected $description = 'Run PoC data health checks (single-tenant)';
 
-    public function handle()
+    public function handle(): int
     {
         $rules = Rule::query()->where('enabled', true)->get()->keyBy('code');
 
@@ -23,8 +23,9 @@ class RunDataHealthCommand extends Command
 
         $summary = [];
 
+
         foreach ($configured as $code => $class) {
-            if ($target && strcasecmp($target, $code) !== 0) {
+            if (is_string($target) && $target !== '' && strcasecmp($target, $code) !== 0) {
                 continue;
             }
             if (! $rules->has($code)) {

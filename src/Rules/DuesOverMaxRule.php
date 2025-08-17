@@ -17,6 +17,10 @@ class DuesOverMaxRule implements RuleContract
         return 'Dues amount exceeds configured maximum';
     }
 
+    /**
+     * @param array<string, mixed> $opt
+     * @return Collection<int, array<string, mixed>>
+     */
     public function evaluate(array $opt = []): Collection
     {
         $multiplier = (float)($opt['multiplier'] ?? 2.0);
