@@ -13,10 +13,26 @@ class DuplicateMonthlyChargesRule implements RuleContract
 
     public function evaluate(array $opt = []): Collection
     {
-        $rows = DB::table('charges')
-            ->selectRaw('member_id, period_ym, COUNT(*) as cnt, SUM(amount) as total_amount')
-            ->where('type','dues')
-            ->groupBy('member_id','period_ym')
+        $periodStart = $opt['period_start'] ?? null;
+        $periodEnd   = $opt['period_end']   ?? null;
+        $status      = $opt['member_status'] ?? null;
+
+        $query = DB::table('charges as c')
+            ->selectRaw('c.member_id, c.period_ym, COUNT(*) as cnt, SUM(c.amount) as total_amount')
+            ->join('members as m', 'm.id', '=', 'c.member_id')
+            ->where('c.type','dues');
+
+        if ($status) {
+            $query->where('m.status', $status);
+        }
+        if ($periodStart) {
+            $query->where('c.period_ym', '>=', $periodStart);
+        }
+        if ($periodEnd) {
+            $query->where('c.period_ym', '<=', $periodEnd);
+        }
+
+        $rows = $query->groupBy('c.member_id','c.period_ym')
             ->havingRaw('COUNT(*) >= 2')
             ->get();
 

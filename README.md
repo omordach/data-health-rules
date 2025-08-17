@@ -172,10 +172,15 @@ data_health_poc_open{rule="DUP_CHARGES"} 1
 
 ## Tuning thresholds
 
-Thresholds live in `dhp_rules.options` (JSON). After the first run, update as needed:
+Thresholds and filters live in `dhp_rules.options` (JSON). After the first run, update as needed:
 
-- `DUE_OVER_MAX` → `{"default_due": 70, "multiplier": 2.0}`
-- `DUP_CHARGES` → `{}` (none)
+- `DUE_OVER_MAX` → `{"default_due": 70, "multiplier": 2.0, "period_start": "2025-01", "period_end": "2025-12", "member_status": "active"}`
+- `DUP_CHARGES` → `{"period_start": "2025-01", "member_status": "active"}`
+
+Common filter keys supported by the built-in rules:
+
+- `period_start` / `period_end` – limit to a window of `period_ym`.
+- `member_status` – only include members with this status.
 
 Then re-run:
 
