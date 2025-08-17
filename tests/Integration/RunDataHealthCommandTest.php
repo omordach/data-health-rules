@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
@@ -45,7 +46,7 @@ class RunDataHealthCommandTest extends TestCase
             $table->timestamps();
         });
 
-        $this->artisan('migrate', ['--database' => 'testing'])->run();
+        Artisan::call('migrate', ['--database' => 'testing']);
         (new DataHealthPocSeeder())->run();
     }
 
@@ -67,7 +68,8 @@ class RunDataHealthCommandTest extends TestCase
             ['id' => 2, 'member_id' => 1, 'period_ym' => '2025-01', 'type' => 'dues', 'amount' => 60],
         ]);
 
-        $this->artisan('data-health-poc:run')->assertExitCode(0);
+        $exit = Artisan::call('data-health-poc:run');
+        $this->assertSame(0, $exit);
 
         $this->assertDatabaseHas('dhp_results', [
             'rule_code' => 'DUE_OVER_MAX',
@@ -84,7 +86,8 @@ class RunDataHealthCommandTest extends TestCase
         DB::table('charges')->where('id', 1)->update(['amount' => 80]);
         DB::table('charges')->where('id', 2)->delete();
 
-        $this->artisan('data-health-poc:run')->assertExitCode(0);
+        $exit = Artisan::call('data-health-poc:run');
+        $this->assertSame(0, $exit);
 
         $this->assertDatabaseHas('dhp_results', [
             'rule_code' => 'DUE_OVER_MAX',
