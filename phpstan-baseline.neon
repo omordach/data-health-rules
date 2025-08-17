@@ -1,43 +1,45 @@
 parameters:
-	ignoreErrors:
-		-
-			message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:updateOrCreate\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 1
-			path: src/Console/RunDataHealthCommand.php
+        ignoreErrors:
+                -
+                        message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:updateOrCreate\(\)\.$#'
+                        identifier: staticMethod.notFound
+                        count: 1
+                        path: src/Console/RunDataHealthCommand.php
 
-		-
-			message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:where\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: src/Console/RunDataHealthCommand.php
+                -
+                        message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:where\(\)\.$#'
+                        identifier: staticMethod.notFound
+                        count: 2
+                        path: src/Console/RunDataHealthCommand.php
 
-		-
-			message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Rule\:\:create\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 1
-			path: tests/MetricsEndpointTest.php
+                -
+                        message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Rule\:\:create\(\)\.$#'
+                        identifier: staticMethod.notFound
+                        count: 1
+                        path: tests/Feature/MetricsEndpointTest.php
 
-		-
-			message: '#^Undefined variable\: \$this$#'
-			identifier: variable.undefined
-			count: 3
-			path: tests/MetricsEndpointTest.php
+                -
+                        message: '#^Undefined variable: \$this$#'
+                        identifier: variable.undefined
+                        count: 3
+                        path: tests/Feature/MetricsEndpointTest.php
 
-		-
-			message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Rule\:\:where\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: tests/RuleSeedingTest.php
+                -
+                        message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Rule\:\:where\(\)\.$#'
+                        identifier: staticMethod.notFound
+                        count: 2
+                        path: tests/Database/RuleSeedingTest.php
 
-		-
-			message: '#^Undefined variable\: \$this$#'
-			identifier: variable.undefined
-			count: 3
-			path: tests/RuleSeedingTest.php
+                -
+                        message: '#^Undefined variable: \$this$#'
+                        identifier: variable.undefined
+                        count: 3
+                        path: tests/Database/RuleSeedingTest.php
 
-		-
-			message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:count\(\)\.$#'
-			identifier: staticMethod.notFound
-			count: 2
-			path: tests/RunDataHealthCommandTest.php
+                -
+                        message: '#^Call to an undefined static method UnionImpact\\DataHealthPoc\\Models\\Result\:\:count\(\)\.$#'
+                        identifier: staticMethod.notFound
+                        count: 2
+                        path: tests/Integration/RunDataHealthCommandTest.php
+
+                
