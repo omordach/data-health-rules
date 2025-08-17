@@ -22,7 +22,7 @@ class DataHealthPocSeeder extends Seeder
             ['code' => 'DUP_CHARGES'],
             [
                 'name'    => 'Duplicate charges in same month',
-                'options' => new \stdClass(),
+                'options' => [],
                 'enabled' => true,
             ]
         );
