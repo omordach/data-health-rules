@@ -180,14 +180,29 @@ Then add your custom mappings to the `rules` array. See [Adding your own rules](
 
 ## Testing
 
-Install development dependencies and run code style checks, static analysis, and the test suite:
+Install development dependencies:
 
 ```bash
 composer install
-composer lint
-composer phpstan
-composer test
 ```
+
+Run code style checks, static analysis, and the test suite:
+
+```bash
+composer lint   # PHP-CS-Fixer
+composer stan   # PHPStan
+composer test   # Pest
+```
+
+Generate coverage (fails if below 70%):
+
+```bash
+composer test:cov
+```
+
+HTML coverage reports are written to `coverage/html/index.html`; open this file in a browser to view the report.
+
+These commands also run in [GitHub Actions](.github/workflows/ci.yml).
 
 To automatically fix code style issues:
 
