@@ -34,8 +34,8 @@
   "scripts": {
     "test": "pest",
     "test:cov": "pest --coverage --min=70 --coverage-html=coverage/html --coverage-clover=coverage/clover.xml",
-    "lint": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff",
-    "lint:fix": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix",
+    "lint": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "lint:fix": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix",
     "stan": "phpstan analyse --memory-limit=1G"
   },
   "config": {
