@@ -36,7 +36,7 @@ Minimal Composer/Laravel package that runs **business-data health checks** insid
   - `DUE_OVER_MAX` — dues charge > `multiplier × typical_due` (default: 2 × 70).
   - `DUP_CHARGES` — same member has ≥2 dues charges in the same month.
 - Stores deduped, durable results in `dhp_results` (`open`/`resolved`).
-- Seeds default rules into `dhp_rules` on first run.
+- Includes a seeder to insert default rules into `dhp_rules`.
 - (Optional) Exposes a Prometheus-style endpoint: `/metrics/data-health-poc`.
 
 Use it on a fresh Laravel app or drop it into your ERP, then customize.
@@ -106,6 +106,12 @@ Run package migrations (creates `dhp_rules`, `dhp_results`):
 php artisan migrate
 ```
 
+Then seed the default rule rows:
+
+```bash
+php artisan db:seed --class="UnionImpact\\DataHealthPoc\\Database\\Seeders\\DataHealthPocSeeder"
+```
+
 That’s it. No config files in the PoC.
 
 ---
@@ -131,7 +137,7 @@ INSERT INTO charges (member_id, period_ym, type, amount) VALUES
 php artisan data-health-poc:run
 ```
 
-- First run **seeds** default rules into `dhp_rules`.
+- Uses rule rows in `dhp_rules` (seeded via `DataHealthPocSeeder`).
 - Results written to `dhp_results` with `status = open`.
 - Re-running will mark stale rows as `resolved` if violations disappear.
 
