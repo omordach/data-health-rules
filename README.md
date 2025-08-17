@@ -15,18 +15,19 @@ Minimal Composer/Laravel package that runs **business-data health checks** insid
 4. [Install (from repo)](#install-from-repo)  
    - [Local path repo (fastest for PoC)](#option-a-local-path-repo)  
    - [Git (GitHub/GitLab) repo](#option-b-git-vcs-repo)  
-5. [Migrate database](#migrate-database)  
-6. [Quick start](#quick-start)  
-7. [Metrics endpoint (optional)](#metrics-endpoint-optional)  
-8. [Tuning thresholds](#tuning-thresholds)  
-9. [Scheduling](#scheduling)  
-10. [Adapting to your schema](#adapting-to-your-schema)  
-11. [Adding your own rules](#adding-your-own-rules)  
-12. [Indexes & performance](#indexes--performance)  
-13. [Troubleshooting](#troubleshooting)  
-14. [Uninstall / clean up](#uninstall--clean-up)  
-15. [Repo layout](#repo-layout)  
-16. [License](#license)
+5. [Migrate database](#migrate-database)
+6. [Quick start](#quick-start)
+7. [Testing](#testing)
+8. [Metrics endpoint (optional)](#metrics-endpoint-optional)
+9. [Tuning thresholds](#tuning-thresholds)
+10. [Scheduling](#scheduling)
+11. [Adapting to your schema](#adapting-to-your-schema)
+12. [Adding your own rules](#adding-your-own-rules)
+13. [Indexes & performance](#indexes--performance)
+14. [Troubleshooting](#troubleshooting)
+15. [Uninstall / clean up](#uninstall--clean-up)
+16. [Repo layout](#repo-layout)
+17. [License](#license)
 
 ---
 
@@ -155,6 +156,19 @@ SELECT * FROM dhp_rules;
 ```bash
 php artisan data-health-poc:run --rule=DUE_OVER_MAX
 ```
+
+---
+
+## Testing
+
+Install development dependencies and run the test suite:
+
+```bash
+composer install
+composer test
+```
+
+The `test` Composer script runs Pest using an in-memory SQLite database provided by Orchestra Testbench, so no additional setup is required.
 
 ---
 
