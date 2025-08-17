@@ -1,6 +1,6 @@
 <?php
 
-namespace UnionImpact\DataHealthPoc\Tests;
+namespace Tests;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
