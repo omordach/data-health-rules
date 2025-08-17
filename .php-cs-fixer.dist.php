@@ -8,7 +8,7 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreVCS(true);
 
 return (new PhpCsFixer\Config())
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setRules([
         '@PSR12' => true,
         'array_syntax' => ['syntax' => 'short'],
