@@ -12,7 +12,9 @@
     "pestphp/pest": "^2.0",
     "pestphp/pest-plugin-laravel": "^2.0",
     "friendsofphp/php-cs-fixer": "^3.86",
-    "phpstan/phpstan": "^2.1"
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^10.5",
+    "nunomaduro/collision": "^8.4"
   },
   "autoload": {
     "psr-4": {
@@ -31,9 +33,10 @@
   },
   "scripts": {
     "test": "pest",
-    "lint": "php-cs-fixer fix --dry-run --diff",
-    "lint:fix": "php-cs-fixer fix",
-    "phpstan": "phpstan analyse --memory-limit=1G"
+    "test:cov": "pest --coverage --min=70 --coverage-html=coverage/html --coverage-clover=coverage/clover.xml",
+    "lint": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --dry-run --diff",
+    "lint:fix": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix",
+    "stan": "phpstan analyse --memory-limit=1G"
   },
   "config": {
     "allow-plugins": {
