@@ -1,16 +1,20 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+
+use function Pest\Laravel\get;
+
 use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Models\Rule;
 
-beforeEach(function () {
+beforeEach(function (): void {
     config(['data-health-poc.metrics.enabled' => true]);
-    (new DataHealthPocServiceProvider($this->app))->boot();
+    (new DataHealthPocServiceProvider(app()))->boot();
 });
 
 it('exposes open violations via metrics endpoint', function () {
-    Rule::create([
+    Rule::query()->create([
         'code' => 'DUE_OVER_MAX',
         'name' => 'Dues amount exceeds maximum',
         'options' => ['default_due' => 70, 'multiplier' => 2],
@@ -31,9 +35,10 @@ it('exposes open violations via metrics endpoint', function () {
         'amount' => 150,
     ]);
 
-    $this->artisan('data-health-poc:run')->assertExitCode(0);
+    $exit = Artisan::call('data-health-poc:run');
+    expect($exit)->toBe(0);
 
-    $response = $this->get('/metrics/data-health-poc');
+    $response = get('/metrics/data-health-poc');
     $response->assertStatus(200);
     $response->assertSee('# HELP data_health_poc_open', false);
     $response->assertSee('data_health_poc_open{rule="DUE_OVER_MAX"}', false);

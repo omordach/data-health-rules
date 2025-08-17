@@ -17,6 +17,10 @@ class DuplicateMonthlyChargesRule implements RuleContract
         return 'Duplicate charges in same month';
     }
 
+    /**
+     * @param array<string, mixed> $opt
+     * @return Collection<int, array<string, mixed>>
+     */
     public function evaluate(array $opt = []): Collection
     {
         $periodStart = $opt['period_start'] ?? null;

@@ -185,7 +185,7 @@ Install development dependencies and run code style checks, static analysis, and
 ```bash
 composer install
 composer lint
-composer phpstan
+composer stan
 composer test
 ```
 

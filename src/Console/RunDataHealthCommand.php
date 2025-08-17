@@ -12,19 +12,20 @@ class RunDataHealthCommand extends Command
     protected $signature = 'data-health-poc:run {--rule=}';
     protected $description = 'Run PoC data health checks (single-tenant)';
 
-    public function handle()
+    public function handle(): int
     {
         $rules = Rule::query()->where('enabled', true)->get()->keyBy('code');
 
         $configured = config('data-health-poc.rules', []);
 
-        $target = $this->option('rule');
+        $targetOption = $this->option('rule');
+        $target = is_string($targetOption) ? $targetOption : '';
         $now = CarbonImmutable::now();
 
         $summary = [];
 
         foreach ($configured as $code => $class) {
-            if ($target && strcasecmp($target, $code) !== 0) {
+            if ($target !== '' && strcasecmp($target, $code) !== 0) {
                 continue;
             }
             if (! $rules->has($code)) {
@@ -39,7 +40,7 @@ class RunDataHealthCommand extends Command
             $openHashes = [];
             foreach ($violations as $v) {
                 $openHashes[] = $v['hash'];
-                Result::updateOrCreate(
+                Result::query()->updateOrCreate(
                     ['hash' => $v['hash']],
                     [
                         'rule_code'   => $code,
@@ -54,14 +55,14 @@ class RunDataHealthCommand extends Command
             }
 
             // Auto-resolve items from this rule that are no longer present
-            Result::where('rule_code', $code)
+            Result::query()->where('rule_code', $code)
                 ->where('status', 'open')
                 ->when($openHashes, fn ($q) => $q->whereNotIn('hash', $openHashes))
                 ->update(['status' => 'resolved']);
 
             $summary[$code] = [
                 'found' => $violations->count(),
-                'open'  => Result::where('rule_code', $code)->where('status', 'open')->count(),
+                'open'  => Result::query()->where('rule_code', $code)->where('status', 'open')->count(),
             ];
         }
 

@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
+
+use function Pest\Laravel\seed;
+
 use UnionImpact\DataHealthPoc\Database\Seeders\DataHealthPocSeeder;
 use UnionImpact\DataHealthPoc\Models\Rule;
 
@@ -27,7 +31,7 @@ class RuleSeedingTestCase extends Orchestra
 
 uses(RuleSeedingTestCase::class);
 
-beforeEach(function () {
+beforeEach(function (): void {
     Schema::create('members', function (Blueprint $t) {
         $t->increments('id');
         $t->string('status')->nullable();
@@ -42,14 +46,15 @@ beforeEach(function () {
         $t->decimal('amount', 10, 2);
     });
 
-    $this->artisan('migrate')->run();
+    Artisan::call('migrate');
 
-    $this->seed(DataHealthPocSeeder::class);
+    seed(DataHealthPocSeeder::class);
 });
 
-it('seeds default rules', function () {
-    $this->artisan('data-health-poc:run')->assertExitCode(0);
+it('seeds default rules', function (): void {
+    $exit = Artisan::call('data-health-poc:run');
+    expect($exit)->toBe(0);
 
-    expect(Rule::where('code', 'DUE_OVER_MAX')->exists())->toBeTrue()
-        ->and(Rule::where('code', 'DUP_CHARGES')->exists())->toBeTrue();
+    expect(Rule::query()->where('code', 'DUE_OVER_MAX')->exists())->toBeTrue()
+        ->and(Rule::query()->where('code', 'DUP_CHARGES')->exists())->toBeTrue();
 });
