@@ -23,9 +23,6 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $app['config']->set('data-health-poc.rules', [
-            'DUE_OVER_MAX' => \UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
-        ]);
     }
 
     protected function setUp(): void

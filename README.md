@@ -157,6 +157,25 @@ SELECT * FROM dhp_rules;
 php artisan data-health-poc:run --rule=DUE_OVER_MAX
 ```
 
+### Rule configuration
+
+Rule discovery uses the `rules` array in `config/data-health-poc.php`, which maps rule codes to their classes. The package ships with defaults for its built-in checks:
+
+```php
+'rules' => [
+    'DUE_OVER_MAX' => UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
+    'DUP_CHARGES'  => UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule::class,
+],
+```
+
+Publish the config to register additional rules:
+
+```bash
+php artisan vendor:publish --tag=data-health-poc-config
+```
+
+Then add your custom mappings to the `rules` array. See [Adding your own rules](#adding-your-own-rules) for a full example.
+
 ---
 
 ## Testing

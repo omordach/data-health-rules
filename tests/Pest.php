@@ -8,4 +8,3 @@ uses(TestCase::class)->in(
     __DIR__.'/RunDataHealthCommandTest.php',
     __DIR__.'/MetricsEndpointTest.php'
 );
-

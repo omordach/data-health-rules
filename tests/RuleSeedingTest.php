@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use UnionImpact\DataHealthPoc\Database\Seeders\DataHealthPocSeeder;
 use UnionImpact\DataHealthPoc\Models\Rule;
-use UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule;
-use UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule;
 
 class RuleSeedingTestCase extends Orchestra
 {
@@ -24,10 +22,6 @@ class RuleSeedingTestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $app['config']->set('data-health-poc.rules', [
-            'DUE_OVER_MAX' => DuesOverMaxRule::class,
-            'DUP_CHARGES'  => DuplicateMonthlyChargesRule::class,
-        ]);
     }
 }
 
