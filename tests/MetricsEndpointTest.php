@@ -1,7 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Models\Rule;
+
+beforeEach(function () {
+    config(['data-health-poc.metrics.enabled' => true]);
+    (new DataHealthPocServiceProvider($this->app))->boot();
+});
 
 it('exposes open violations via metrics endpoint', function () {
     Rule::create([
