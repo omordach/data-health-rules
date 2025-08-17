@@ -14,9 +14,6 @@ class RunDataHealthCommand extends Command
 
     public function handle()
     {
-        // Ensure rule rows exist (seed defaults if missing)
-        $this->seedDefaults();
-
         $rules = Rule::query()->where('enabled', true)->get()->keyBy('code');
 
         $configured = config('data-health-poc.rules', []);
@@ -72,16 +69,4 @@ class RunDataHealthCommand extends Command
         return self::SUCCESS;
     }
 
-    protected function seedDefaults(): void
-    {
-        Rule::firstOrCreate(
-            ['code' => 'DUE_OVER_MAX'],
-            ['name' => 'Dues amount exceeds maximum', 'options' => ['default_due' => 70, 'multiplier' => 2], 'enabled' => true]
-        );
-
-        Rule::firstOrCreate(
-            ['code' => 'DUP_CHARGES'],
-            ['name' => 'Duplicate charges in same month', 'options' => new \stdClass(), 'enabled' => true]
-        );
-    }
 }

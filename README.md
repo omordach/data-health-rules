@@ -36,7 +36,7 @@ Minimal Composer/Laravel package that runs **business-data health checks** insid
   - `DUE_OVER_MAX` — dues charge > `multiplier × typical_due` (default: 2 × 70).
   - `DUP_CHARGES` — same member has ≥2 dues charges in the same month.
 - Stores deduped, durable results in `dhp_results` (`open`/`resolved`).
-- Seeds default rules into `dhp_rules` on first run.
+- Includes a seeder to insert default rules into `dhp_rules`.
 - (Optional) Exposes a Prometheus-style endpoint: `/metrics/data-health-poc`.
 
 Use it on a fresh Laravel app or drop it into your ERP, then customize.
@@ -106,11 +106,13 @@ Run package migrations (creates `dhp_rules`, `dhp_results`):
 php artisan migrate
 ```
 
+
 That’s it. You can optionally publish the config file if you want to register custom rules:
 
 ```bash
 php artisan vendor:publish --tag=data-health-poc-config
 ```
+
 
 ---
 
@@ -135,7 +137,7 @@ INSERT INTO charges (member_id, period_ym, type, amount) VALUES
 php artisan data-health-poc:run
 ```
 
-- First run **seeds** default rules into `dhp_rules`.
+- Uses rule rows in `dhp_rules` (seeded via `DataHealthPocSeeder`).
 - Results written to `dhp_results` with `status = open`.
 - Re-running will mark stale rows as `resolved` if violations disappear.
 
@@ -176,10 +178,15 @@ data_health_poc_open{rule="DUP_CHARGES"} 1
 
 ## Tuning thresholds
 
-Thresholds live in `dhp_rules.options` (JSON). After the first run, update as needed:
+Thresholds and filters live in `dhp_rules.options` (JSON). After the first run, update as needed:
 
-- `DUE_OVER_MAX` → `{"default_due": 70, "multiplier": 2.0}`
-- `DUP_CHARGES` → `{}` (none)
+- `DUE_OVER_MAX` → `{"default_due": 70, "multiplier": 2.0, "period_start": "2025-01", "period_end": "2025-12", "member_status": "active"}`
+- `DUP_CHARGES` → `{"period_start": "2025-01", "member_status": "active"}`
+
+Common filter keys supported by the built-in rules:
+
+- `period_start` / `period_end` – limit to a window of `period_ym`.
+- `member_status` – only include members with this status.
 
 Then re-run:
 

@@ -10,7 +10,7 @@ return new class extends Migration {
             $t->id();
             $t->string('code')->unique();     // DUE_OVER_MAX, DUP_CHARGES
             $t->string('name');
-            $t->json('options')->nullable();  // {"default_due":70,"multiplier":2}
+            $t->json('options')->nullable();  // {"default_due":70,"multiplier":2,"period_start":"2025-01","member_status":"active"}
             $t->boolean('enabled')->default(true);
             $t->timestamps();
         });
