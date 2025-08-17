@@ -17,7 +17,9 @@ class DataHealthPocServiceProvider extends ServiceProvider
         // migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
+
         // console commands & publishable config
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\RunDataHealthCommand::class,
@@ -28,7 +30,10 @@ class DataHealthPocServiceProvider extends ServiceProvider
             ], 'data-health-poc-config');
         }
 
-        // optional: small metrics endpoint
-        Route::get('/metrics/data-health-poc', Http\MetricsController::class);
+        // optional metrics endpoint
+        if (config('data-health-poc.metrics.enabled')) {
+            Route::middleware(config('data-health-poc.metrics.middleware', []))
+                ->get('/metrics/data-health-poc', Http\MetricsController::class);
+        }
     }
 }
