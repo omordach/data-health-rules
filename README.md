@@ -17,7 +17,7 @@ Minimal Composer/Laravel package that runs **business-data health checks** insid
    - [Git (GitHub/GitLab) repo](#option-b-git-vcs-repo)  
 5. [Migrate database](#migrate-database)
 6. [Quick start](#quick-start)
-7. [Testing](#testing)
+7. [Testing & CI](#testing--ci)
 8. [Metrics endpoint (optional)](#metrics-endpoint-optional)
 9. [Tuning thresholds](#tuning-thresholds)
 10. [Scheduling](#scheduling)
@@ -178,7 +178,7 @@ Then add your custom mappings to the `rules` array. See [Adding your own rules](
 
 ---
 
-## Testing
+## Testing & CI
 
 Install development dependencies:
 
@@ -186,18 +186,13 @@ Install development dependencies:
 composer install
 ```
 
-Run code style checks, static analysis, and the test suite:
+Run code style checks, static analysis, the test suite, and coverage:
 
 ```bash
-composer lint   # PHP-CS-Fixer
-composer stan   # PHPStan
-composer test   # Pest
-```
-
-Generate coverage (fails if below 70%):
-
-```bash
-composer test:cov
+composer lint      # PHP-CS-Fixer
+composer stan      # PHPStan
+composer test      # Pest
+composer test:cov  # Pest with coverage (fails if below 70%)
 ```
 
 HTML coverage reports are written to `coverage/html/index.html`; open this file in a browser to view the report.
