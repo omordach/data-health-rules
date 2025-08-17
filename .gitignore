@@ -5,6 +5,7 @@
 /build/
 /dist/
 /coverage/
+coverage.xml
 # general build artifacts
 *.log
 *.tmp
