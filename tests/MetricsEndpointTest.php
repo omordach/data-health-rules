@@ -1,36 +1,34 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Models\Rule;
+use UnionImpact\DataHealthPoc\Tests\Models\Charge;
+use UnionImpact\DataHealthPoc\Tests\Models\Member;
 
 beforeEach(function () {
     config(['data-health-poc.metrics.enabled' => true]);
     (new DataHealthPocServiceProvider($this->app))->boot();
-});
 
-it('exposes open violations via metrics endpoint', function () {
-    Rule::create([
+    Rule::factory()->create([
         'code' => 'DUE_OVER_MAX',
         'name' => 'Dues amount exceeds maximum',
         'options' => ['default_due' => 70, 'multiplier' => 2],
-        'enabled' => true,
     ]);
 
-    DB::table('members')->insert([
-        'id' => 1,
-        'status' => 'active',
+    $member = Member::factory()->create([
         'typical_due' => 50,
+        'status' => 'active',
     ]);
 
-    DB::table('charges')->insert([
-        'id' => 1,
-        'member_id' => 1,
+    Charge::factory()->create([
+        'member_id' => $member->id,
         'period_ym' => '2025-01',
         'type' => 'dues',
         'amount' => 150,
     ]);
+});
 
+it('exposes open violations via metrics endpoint', function () {
     $this->artisan('data-health-poc:run')->assertExitCode(0);
 
     $response = $this->get('/metrics/data-health-poc');

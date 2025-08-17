@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 use UnionImpact\DataHealthPoc\Database\Seeders\DataHealthPocSeeder;
 use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Models\Result;
+use UnionImpact\DataHealthPoc\Tests\Models\Charge;
+use UnionImpact\DataHealthPoc\Tests\Seeders\MemberChargeSeeder;
 
 class RunDataHealthCommandTest extends TestCase
 {
@@ -47,6 +48,7 @@ class RunDataHealthCommandTest extends TestCase
 
         $this->artisan('migrate', ['--database' => 'testing'])->run();
         (new DataHealthPocSeeder())->run();
+        $this->seed(MemberChargeSeeder::class);
     }
 
     protected function tearDown(): void
@@ -58,15 +60,6 @@ class RunDataHealthCommandTest extends TestCase
 
     public function test_command_finds_and_resolves_violations(): void
     {
-        DB::table('members')->insert([
-            ['id' => 1, 'typical_due' => 50, 'status' => 'active'],
-        ]);
-
-        DB::table('charges')->insert([
-            ['id' => 1, 'member_id' => 1, 'period_ym' => '2025-01', 'type' => 'dues', 'amount' => 150],
-            ['id' => 2, 'member_id' => 1, 'period_ym' => '2025-01', 'type' => 'dues', 'amount' => 60],
-        ]);
-
         $this->artisan('data-health-poc:run')->assertExitCode(0);
 
         $this->assertDatabaseHas('dhp_results', [
@@ -81,8 +74,8 @@ class RunDataHealthCommandTest extends TestCase
         ]);
         $this->assertEquals(2, Result::count());
 
-        DB::table('charges')->where('id', 1)->update(['amount' => 80]);
-        DB::table('charges')->where('id', 2)->delete();
+        Charge::whereKey(1)->update(['amount' => 80]);
+        Charge::whereKey(2)->delete();
 
         $this->artisan('data-health-poc:run')->assertExitCode(0);
 

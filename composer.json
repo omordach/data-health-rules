@@ -24,6 +24,14 @@
       "database/seeders"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "UnionImpact\\DataHealthPoc\\Tests\\": "tests/"
+    },
+    "classmap": [
+      "database/factories"
+    ]
+  },
   "extra": {
     "laravel": {
       "providers": [
