@@ -9,7 +9,7 @@ class DataHealthPocServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // no config for PoC
+        $this->mergeConfigFrom(__DIR__.'/../config/data-health-poc.php', 'data-health-poc');
     }
 
     public function boot(): void
@@ -17,14 +17,21 @@ class DataHealthPocServiceProvider extends ServiceProvider
         // migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        // console commands
+        // console commands & publish config
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\RunDataHealthCommand::class,
             ]);
+
+            $this->publishes([
+                __DIR__.'/../config/data-health-poc.php' => config_path('data-health-poc.php'),
+            ], 'data-health-poc-config');
         }
 
-        // optional: small metrics endpoint
-        Route::get('/metrics/data-health-poc', Http\MetricsController::class);
+        // optional metrics endpoint
+        if (config('data-health-poc.metrics.enabled')) {
+            Route::middleware(config('data-health-poc.metrics.middleware', []))
+                ->get('/metrics/data-health-poc', Http\MetricsController::class);
+        }
     }
 }

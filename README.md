@@ -106,7 +106,11 @@ Run package migrations (creates `dhp_rules`, `dhp_results`):
 php artisan migrate
 ```
 
-That’s it. No config files in the PoC.
+That’s it. Config is optional. Publish the config to customize the metrics endpoint:
+
+```bash
+php artisan vendor:publish --tag=data-health-poc-config
+```
 
 ---
 
@@ -166,7 +170,32 @@ data_health_poc_open{rule="DUE_OVER_MAX"} 3
 data_health_poc_open{rule="DUP_CHARGES"} 1
 ```
 
-> ⚠️ For PoC simplicity this route is public. In production, protect it (e.g., behind a proxy, VPN, or by wrapping the route with auth middleware in the service provider).
+Configure or disable the route via `config/data-health-poc.php`:
+
+```php
+return [
+    'metrics' => [
+        'enabled' => true,          // set false to disable
+        'middleware' => [],         // e.g. ['auth'] to require login
+    ],
+];
+```
+
+**Disable the endpoint:**
+
+```php
+'metrics' => ['enabled' => false],
+```
+
+**Secure the endpoint:**
+
+```php
+'metrics' => [
+    'middleware' => ['auth'],
+],
+```
+
+> ⚠️ By default this route is public. For production, at minimum apply auth middleware or put it behind a proxy/VPN.
 
 ---
 
