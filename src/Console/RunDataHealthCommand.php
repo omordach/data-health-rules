@@ -16,18 +16,14 @@ class RunDataHealthCommand extends Command
     {
         $rules = Rule::query()->where('enabled', true)->get()->keyBy('code');
 
-        // Map of rule code => class
-        $builtIns = [
-            'DUE_OVER_MAX' => \UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
-            'DUP_CHARGES'  => \UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule::class,
-        ];
+        $configured = config('data-health-poc.rules', []);
 
         $target = $this->option('rule');
         $now = CarbonImmutable::now();
 
         $summary = [];
 
-        foreach ($builtIns as $code => $class) {
+        foreach ($configured as $code => $class) {
             if ($target && strcasecmp($target, $code) !== 0) continue;
             if (! $rules->has($code)) continue;
 

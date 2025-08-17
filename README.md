@@ -106,13 +106,13 @@ Run package migrations (creates `dhp_rules`, `dhp_results`):
 php artisan migrate
 ```
 
-Then seed the default rule rows:
+
+That’s it. You can optionally publish the config file if you want to register custom rules:
 
 ```bash
-php artisan db:seed --class="UnionImpact\\DataHealthPoc\\Database\\Seeders\\DataHealthPocSeeder"
+php artisan vendor:publish --tag=data-health-poc-config
 ```
 
-That’s it. No config files in the PoC.
 
 ---
 
@@ -295,8 +295,33 @@ INSERT INTO dhp_rules (code, name, options, enabled)
 VALUES ('MISSING_DUES', 'Active member missing dues this month', JSON_OBJECT('month','2025-08'), 1);
 ```
 
-**Make it discoverable (PoC tip):**  
-For the PoC, built-in rules are hardcoded. To run your custom rule, temporarily **swap** one of the built-in rule classes (e.g., replace the `DUP_CHARGES` class mapping in `RunDataHealthCommand`) or fork the package and add your rule to the `$builtIns` map.
+**Register the rule class** so the command can discover it:
+
+1) Publish the config file if you haven't already:
+
+```bash
+php artisan vendor:publish --tag=data-health-poc-config
+```
+
+2) Edit `config/data-health-poc.php` and add your rule code and class:
+
+```php
+return [
+    'rules' => [
+        // built-ins
+        'DUE_OVER_MAX' => UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
+        'DUP_CHARGES'  => UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule::class,
+        // custom
+        'MISSING_DUES' => App\Health\Rules\MissingDuesRule::class,
+    ],
+];
+```
+
+Then run the command:
+
+```bash
+php artisan data-health-poc:run --rule=MISSING_DUES
+```
 
 ---
 
