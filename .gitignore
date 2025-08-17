@@ -1,2 +1,12 @@
 /vendor/
 /.php-cs-fixer.cache
+/node_modules/
+/.idea/
+/build/
+/dist/
+/coverage/
+# general build artifacts
+*.log
+*.tmp
+*.cache
+*.out

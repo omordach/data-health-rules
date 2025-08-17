@@ -38,7 +38,7 @@ Minimal Composer/Laravel package that runs **business-data health checks** insid
   - `DUP_CHARGES` — same member has ≥2 dues charges in the same month.
 - Stores deduped, durable results in `dhp_results` (`open`/`resolved`).
 - Includes a seeder to insert default rules into `dhp_rules`.
-- (Optional) Exposes a Prometheus-style endpoint: `/metrics/data-health-poc`.
+- (Optional) Exposes a Prometheus-style endpoint: `/metrics/data-health-poc` (disabled by default).
 
 Use it on a fresh Laravel app or drop it into your ERP, then customize.
 
@@ -182,7 +182,7 @@ The `test` Composer script runs Pest using an in-memory SQLite database provided
 
 ## Metrics endpoint (optional)
 
-A minimal Prometheus endpoint is available at:
+A minimal Prometheus endpoint is available at (disabled by default):
 
 ```
 GET /metrics/data-health-poc
@@ -196,32 +196,17 @@ data_health_poc_open{rule="DUE_OVER_MAX"} 3
 data_health_poc_open{rule="DUP_CHARGES"} 1
 ```
 
-Configure or disable the route via `config/data-health-poc.php`:
+Enable and secure the route via `config/data-health-poc.php`:
 
 ```php
 return [
     'metrics' => [
-        'enabled' => true,          // set false to disable
-        'middleware' => [],         // e.g. ['auth'] to require login
+        'enabled' => true,          // set true to expose the route
+        'middleware' => ['auth.basic'], // recommended: protect with auth
     ],
 ];
 ```
-
-**Disable the endpoint:**
-
-```php
-'metrics' => ['enabled' => false],
-```
-
-**Secure the endpoint:**
-
-```php
-'metrics' => [
-    'middleware' => ['auth'],
-],
-```
-
-> ⚠️ By default this route is public. For production, at minimum apply auth middleware or put it behind a proxy/VPN.
+> ⚠️ Enabling this route exposes internal health data. Always protect it with authentication middleware or put it behind a proxy/VPN.
 
 ---
 
@@ -437,4 +422,4 @@ data-health-poc/
 
 ## License
 
-MIT
+This project is open-sourced software licensed under the [MIT license](LICENSE).
