@@ -39,7 +39,7 @@ jobs:
         if: ${{ hashFiles('package-lock.json') != '' || hashFiles('npm-shrinkwrap.json') != '' || hashFiles('yarn.lock') != '' || hashFiles('pnpm-lock.yaml') != '' }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
       - name: Install Node dependencies
         if: ${{ hashFiles('package-lock.json') != '' || hashFiles('npm-shrinkwrap.json') != '' || hashFiles('yarn.lock') != '' || hashFiles('pnpm-lock.yaml') != '' }}
