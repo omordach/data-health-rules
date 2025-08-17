@@ -18,10 +18,6 @@ class RunDataHealthCommandTest extends TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
-        $app['config']->set('data-health-poc.rules', [
-            'DUE_OVER_MAX' => \UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
-            'DUP_CHARGES'  => \UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule::class,
-        ]);
     }
 
     protected function getPackageProviders($app)
