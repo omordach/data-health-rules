@@ -429,4 +429,4 @@ data-health-poc/
 
 ## License
 
-MIT
+This project is open-sourced software licensed under the [MIT license](LICENSE).
