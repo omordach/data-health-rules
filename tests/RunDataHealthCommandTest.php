@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
-use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Database\Seeders\DataHealthPocSeeder;
+use UnionImpact\DataHealthPoc\DataHealthPocServiceProvider;
 use UnionImpact\DataHealthPoc\Models\Result;
 
 class RunDataHealthCommandTest extends TestCase

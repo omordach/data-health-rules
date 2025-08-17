@@ -10,7 +10,9 @@
   "require-dev": {
     "orchestra/testbench": "^9.0",
     "pestphp/pest": "^2.0",
-    "pestphp/pest-plugin-laravel": "^2.0"
+    "pestphp/pest-plugin-laravel": "^2.0",
+    "friendsofphp/php-cs-fixer": "^3.86",
+    "phpstan/phpstan": "^2.1"
   },
   "autoload": {
     "psr-4": {
@@ -28,7 +30,10 @@
     }
   },
   "scripts": {
-    "test": "pest"
+    "test": "pest",
+    "lint": "php-cs-fixer fix --dry-run --diff",
+    "lint:fix": "php-cs-fixer fix",
+    "phpstan": "phpstan analyse --memory-limit=1G"
   },
   "config": {
     "allow-plugins": {

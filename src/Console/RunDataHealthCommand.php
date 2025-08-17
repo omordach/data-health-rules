@@ -5,7 +5,7 @@ namespace UnionImpact\DataHealthPoc\Console;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use UnionImpact\DataHealthPoc\Contracts\Rule as RuleContract;
-use UnionImpact\DataHealthPoc\Models\{Rule, Result};
+use UnionImpact\DataHealthPoc\Models\{Result, Rule};
 
 class RunDataHealthCommand extends Command
 {
@@ -24,8 +24,12 @@ class RunDataHealthCommand extends Command
         $summary = [];
 
         foreach ($configured as $code => $class) {
-            if ($target && strcasecmp($target, $code) !== 0) continue;
-            if (! $rules->has($code)) continue;
+            if ($target && strcasecmp($target, $code) !== 0) {
+                continue;
+            }
+            if (! $rules->has($code)) {
+                continue;
+            }
 
             /** @var RuleContract $rule */
             $rule = app($class);
@@ -52,12 +56,12 @@ class RunDataHealthCommand extends Command
             // Auto-resolve items from this rule that are no longer present
             Result::where('rule_code', $code)
                 ->where('status', 'open')
-                ->when($openHashes, fn($q) => $q->whereNotIn('hash', $openHashes))
+                ->when($openHashes, fn ($q) => $q->whereNotIn('hash', $openHashes))
                 ->update(['status' => 'resolved']);
 
             $summary[$code] = [
                 'found' => $violations->count(),
-                'open'  => Result::where('rule_code', $code)->where('status','open')->count(),
+                'open'  => Result::where('rule_code', $code)->where('status', 'open')->count(),
             ];
         }
 

@@ -8,8 +8,14 @@ use UnionImpact\DataHealthPoc\Contracts\Rule as RuleContract;
 
 class DuesOverMaxRule implements RuleContract
 {
-    public static function code(): string { return 'DUE_OVER_MAX'; }
-    public static function name(): string { return 'Dues amount exceeds configured maximum'; }
+    public static function code(): string
+    {
+        return 'DUE_OVER_MAX';
+    }
+    public static function name(): string
+    {
+        return 'Dues amount exceeds configured maximum';
+    }
 
     public function evaluate(array $opt = []): Collection
     {
@@ -33,15 +39,15 @@ SQL;
         $params = [$defaultDue, $multiplier];
 
         if ($status) {
-            $sql     .= " AND b.status = ?";
+            $sql     .= ' AND b.status = ?';
             $params[] = $status;
         }
         if ($periodStart) {
-            $sql     .= " AND c.period_ym >= ?";
+            $sql     .= ' AND c.period_ym >= ?';
             $params[] = $periodStart;
         }
         if ($periodEnd) {
-            $sql     .= " AND c.period_ym <= ?";
+            $sql     .= ' AND c.period_ym <= ?';
             $params[] = $periodEnd;
         }
 
@@ -49,7 +55,7 @@ SQL;
 
         return collect($rows)->map(function ($r) {
             $payload = ['amount' => (float)$r->amount, 'typical_due' => (float)$r->typical_due, 'period_ym' => $r->period_ym];
-            $hash = sha1(json_encode(['r'=> 'DUE_OVER_MAX', 'm'=>$r->member_id, 'p'=>$r->period_ym, 'a'=>$r->amount], JSON_THROW_ON_ERROR));
+            $hash = sha1(json_encode(['r' => 'DUE_OVER_MAX', 'm' => $r->member_id, 'p' => $r->period_ym, 'a' => $r->amount], JSON_THROW_ON_ERROR));
             return [
                 'entity_type' => 'member',
                 'entity_id'   => (string)$r->member_id,

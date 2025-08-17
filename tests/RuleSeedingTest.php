@@ -59,4 +59,3 @@ it('seeds default rules', function () {
     expect(Rule::where('code', 'DUE_OVER_MAX')->exists())->toBeTrue()
         ->and(Rule::where('code', 'DUP_CHARGES')->exists())->toBeTrue();
 });
-

@@ -161,11 +161,19 @@ php artisan data-health-poc:run --rule=DUE_OVER_MAX
 
 ## Testing
 
-Install development dependencies and run the test suite:
+Install development dependencies and run code style checks, static analysis, and the test suite:
 
 ```bash
 composer install
+composer lint
+composer phpstan
 composer test
+```
+
+To automatically fix code style issues:
+
+```bash
+composer lint:fix
 ```
 
 The `test` Composer script runs Pest using an in-memory SQLite database provided by Orchestra Testbench, so no additional setup is required.

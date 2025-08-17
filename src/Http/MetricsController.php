@@ -12,13 +12,13 @@ class MetricsController extends Controller
     {
         $series = DB::table('dhp_results')
             ->selectRaw('rule_code, COUNT(*) as cnt')
-            ->where('status','open')
+            ->where('status', 'open')
             ->groupBy('rule_code')
             ->get();
 
         $out = [];
-        $out[] = "# HELP data_health_poc_open Open violations by rule";
-        $out[] = "# TYPE data_health_poc_open gauge";
+        $out[] = '# HELP data_health_poc_open Open violations by rule';
+        $out[] = '# TYPE data_health_poc_open gauge';
         foreach ($series as $row) {
             $out[] = sprintf('data_health_poc_open{rule="%s"} %d', $row->rule_code, $row->cnt);
         }
