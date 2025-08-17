@@ -10,7 +10,10 @@
   "autoload": {
     "psr-4": {
       "UnionImpact\\DataHealthPoc\\": "src/"
-    }
+    },
+    "classmap": [
+      "database/seeders"
+    ]
   },
   "extra": {
     "laravel": {

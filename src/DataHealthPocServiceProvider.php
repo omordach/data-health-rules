@@ -17,7 +17,9 @@ class DataHealthPocServiceProvider extends ServiceProvider
         // migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        // console commands & publish config
+
+        // console commands & publishable config
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\RunDataHealthCommand::class,

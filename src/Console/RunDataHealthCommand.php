@@ -14,23 +14,16 @@ class RunDataHealthCommand extends Command
 
     public function handle()
     {
-        // Ensure rule rows exist (seed defaults if missing)
-        $this->seedDefaults();
-
         $rules = Rule::query()->where('enabled', true)->get()->keyBy('code');
 
-        // Map of rule code => class
-        $builtIns = [
-            'DUE_OVER_MAX' => \UnionImpact\DataHealthPoc\Rules\DuesOverMaxRule::class,
-            'DUP_CHARGES'  => \UnionImpact\DataHealthPoc\Rules\DuplicateMonthlyChargesRule::class,
-        ];
+        $configured = config('data-health-poc.rules', []);
 
         $target = $this->option('rule');
         $now = CarbonImmutable::now();
 
         $summary = [];
 
-        foreach ($builtIns as $code => $class) {
+        foreach ($configured as $code => $class) {
             if ($target && strcasecmp($target, $code) !== 0) continue;
             if (! $rules->has($code)) continue;
 
@@ -76,16 +69,4 @@ class RunDataHealthCommand extends Command
         return self::SUCCESS;
     }
 
-    protected function seedDefaults(): void
-    {
-        Rule::firstOrCreate(
-            ['code' => 'DUE_OVER_MAX'],
-            ['name' => 'Dues amount exceeds maximum', 'options' => ['default_due' => 70, 'multiplier' => 2], 'enabled' => true]
-        );
-
-        Rule::firstOrCreate(
-            ['code' => 'DUP_CHARGES'],
-            ['name' => 'Duplicate charges in same month', 'options' => new \stdClass(), 'enabled' => true]
-        );
-    }
 }
